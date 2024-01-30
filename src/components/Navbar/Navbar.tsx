@@ -5,8 +5,11 @@ import Image from "next/image";
 import { Wallet } from "./Wallet";
 
 const NavLinks = [
-  { name: "Home", link: "/" },
-  { name: "Chads", link: "/Chads" },
+  { name: "Home", link: "/", color: "cyan" },
+  { name: "PayChad", link: "/Pay", color: "lightblue" },
+  { name: "PayrollHistory", link: "/PayrollHistory", color: "coral" },
+  { name: "Chads", link: "/Chads", color: "lightgreen" },
+  { name: "AddChads", link: "/AddChads", color: "aquamarine" },
 ];
 
 export const Navbar = () => {
@@ -45,7 +48,35 @@ export const Navbar = () => {
           }}
         >
           <Image src="/salary-envelope.png" height={40} width={40} alt="logo" />
-          <Typography fontSize={"20px"}>PayChad</Typography>
+          {/* <Typography fontSize={"20px"}>PayChad</Typography> */}
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+            }}
+          >
+            <Typography fontSize={"25px"} color={"lavender"}>
+              P
+            </Typography>
+            <Typography fontSize={"25px"} color={"skyblue"}>
+              a
+            </Typography>
+            <Typography fontSize={"25px"} color={"coral"}>
+              y
+            </Typography>
+            <Typography fontSize={"25px"} color={"cyan"}>
+              C
+            </Typography>
+            <Typography fontSize={"25px"} color={"lightblue"}>
+              h
+            </Typography>
+            <Typography fontSize={"25px"} color={"darkTurquoise"}>
+              a
+            </Typography>
+            <Typography fontSize={"25px"} color={"lightpink"}>
+              d
+            </Typography>
+          </Box>
         </Box>
 
         <Box
@@ -66,7 +97,7 @@ export const Navbar = () => {
             >
               <Button
                 sx={{
-                  color: "#929292",
+                  color: nav.color,
                   backgroundColor: "black",
                   "&:hover": {
                     color: "white",

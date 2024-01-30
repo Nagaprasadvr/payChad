@@ -1,22 +1,40 @@
 "use client";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Input, Typography } from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Person, generatePeopleData } from "./data";
-import { PayrollHistoryModal } from "@/components/PayrollHistory";
+import SearchIcon from "@mui/icons-material/Search";
+import CloseIcon from "@mui/icons-material/Close";
+import { useRouter } from "next/navigation";
+import { searchFilter } from "./helpers";
 
 const Chads = () => {
+  const router = useRouter();
   const [peopleData, setPeopleData] = useState<Person[]>([]);
+  const [showSearch, setShowSearch] = useState(false);
+  const [searchString, setSearchString] = useState("");
   useEffect(() => {
     const data = generatePeopleData();
     if (data) setPeopleData(data);
   }, []);
+
+  const memoizedData = useMemo(() => {
+    if (searchString !== "" && showSearch)
+      return searchFilter(peopleData, searchString);
+
+    return peopleData;
+  }, [peopleData, searchString, showSearch]);
+
   return (
     <>
       <Box
-        className="center"
         sx={{
           mb: "20px",
+          display: "flex",
+          flexDirection: "row",
+          gap: "20px",
+          width: "100%",
+          justifyContent: "space-evenly",
         }}
       >
         <Typography
@@ -26,6 +44,47 @@ const Chads = () => {
         >
           Chads
         </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            gap: "20px",
+          }}
+        >
+          {showSearch ? (
+            <>
+              <Input
+                value={searchString}
+                onChange={(e) => {
+                  setSearchString(e.target.value);
+                }}
+                sx={{
+                  color: "white",
+                  borderBottomColor: "white",
+                }}
+              ></Input>
+
+              <Button
+                onClick={() => {
+                  setSearchString("");
+                  setShowSearch(!showSearch);
+                }}
+              >
+                <CloseIcon />
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button
+                onClick={() => {
+                  setShowSearch(!showSearch);
+                }}
+              >
+                <SearchIcon />
+              </Button>
+            </>
+          )}
+        </Box>
       </Box>
       <Box
         sx={{
@@ -38,7 +97,7 @@ const Chads = () => {
           width: "100%",
         }}
       >
-        {peopleData.map((person) => (
+        {memoizedData.map((person) => (
           <Box
             key={person.name}
             sx={{
@@ -165,7 +224,7 @@ const Chads = () => {
                     padding: "2px",
                     borderRadius: "10px",
                     backgroundColor: "purple",
-                    color: "black",
+                    color: "whitesmoke",
                     width: "120px",
                     textAlign: "center",
                   }}
@@ -215,14 +274,23 @@ const Chads = () => {
                 width: "100%",
               }}
             >
-              <PayrollHistoryModal />
+              <Button
+                sx={{
+                  backgroundColor: "aliceblue",
+                }}
+                onClick={() =>
+                  router.push(`/PayrollHistory/${person.name.toLowerCase()}`)
+                }
+              >
+                Open History
+              </Button>
 
               <Button
                 sx={{
                   backgroundColor: "aliceblue",
                 }}
               >
-                Pay Chad
+                generate receipt
               </Button>
             </Box>
           </Box>

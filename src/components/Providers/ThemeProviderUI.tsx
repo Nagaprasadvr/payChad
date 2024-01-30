@@ -30,6 +30,16 @@ const darkTheme = createTheme({
         },
       },
     },
+    MuiSelect: {
+      styleOverrides: {
+        root: {
+          color: "white",
+          backgroundColor: "black",
+          border: "1px solid white",
+          borderRadius: "10px",
+        },
+      },
+    },
     MuiButton: {
       styleOverrides: {
         root: {

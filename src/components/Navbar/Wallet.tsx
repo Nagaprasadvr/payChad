@@ -1,5 +1,12 @@
 "use client";
-import { Box, Button, Icon, Menu, MenuItem, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  ClickAwayListener,
+  Menu,
+  MenuItem,
+  Typography,
+} from "@mui/material";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import React, { useEffect } from "react";
@@ -32,10 +39,10 @@ export const Wallet = () => {
   };
 
   useEffect(() => {
-    if (connected && publicKey) {
+    if (connected) {
       toast.success("Connected to wallet !");
     }
-  }, [connected, publicKey]);
+  }, [connected]);
 
   return (
     <>
@@ -54,65 +61,69 @@ export const Wallet = () => {
       ) : (
         wallet && (
           <>
-            <Box
-              display={"flex"}
-              flexDirection={"row"}
-              sx={{
-                borderRadius: "0.5rem",
-                border: "2px solid white",
-                zIndex: 100,
-                padding: "8px",
-                height: "30px",
-              }}
-              alignContent={"center"}
-              alignItems={"center"}
-              justifyContent={"center"}
-              gap="10px"
-            >
-              <Image
-                alt={wallet.adapter.name}
-                height={24}
-                src={wallet.adapter.icon}
-                width={24}
-              />
-              <Button
+            <ClickAwayListener onClickAway={handleClose}>
+              <Box
+                display={"flex"}
+                flexDirection={"row"}
                 sx={{
-                  color: "white",
-                  backgroundColor: "black",
+                  borderRadius: "0.5rem",
+                  border: "2px solid white",
+                  zIndex: 100,
+                  padding: "8px",
                   height: "30px",
                 }}
-                onClick={handleClick}
+                alignContent={"center"}
+                alignItems={"center"}
+                justifyContent={"center"}
+                gap="10px"
               >
-                {publicKey && (
-                  <Typography>
-                    {minimizePubkey(publicKey.toBase58())}
-                  </Typography>
-                )}
-              </Button>
-              <Menu
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-                sx={{
-                  height: "300px",
-                  width: "300px",
-                }}
-              >
-                <MenuItem
-                  onClick={handleDisconnect}
+                <Image
+                  alt={wallet.adapter.name}
+                  height={24}
+                  src={wallet.adapter.icon}
+                  width={24}
+                />
+
+                <Button
                   sx={{
                     color: "white",
-                    backgroundColor: "transparent",
-                    "&:hover": {
-                      color: "white",
-                      backgroundColor: CHARCOAL,
-                    },
+                    backgroundColor: "black",
+                    height: "30px",
+                  }}
+                  onClick={handleClick}
+                >
+                  {publicKey && (
+                    <Typography>
+                      {minimizePubkey(publicKey.toBase58())}
+                    </Typography>
+                  )}
+                </Button>
+
+                <Menu
+                  anchorEl={anchorEl}
+                  open={open}
+                  onClose={handleClose}
+                  sx={{
+                    height: "300px",
+                    width: "300px",
                   }}
                 >
-                  Disconnect
-                </MenuItem>
-              </Menu>
-            </Box>
+                  <MenuItem
+                    onClick={handleDisconnect}
+                    sx={{
+                      color: "white",
+                      backgroundColor: "transparent",
+                      "&:hover": {
+                        color: "white",
+                        backgroundColor: CHARCOAL,
+                      },
+                    }}
+                  >
+                    Disconnect
+                  </MenuItem>
+                </Menu>
+              </Box>
+            </ClickAwayListener>
           </>
         )
       )}

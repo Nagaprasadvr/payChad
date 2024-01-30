@@ -1,12 +1,29 @@
+import { Keypair } from "@solana/web3.js";
+
 export type Person = {
+  [key: string]: any; // Add the "key" field
+  id: number;
   name: string;
   employeeCode: string;
   contactNumber: string;
   designation: string;
   address: string;
+  pubkey: string; // Add the "pubkey" field
   salary: number;
   team: string; // Add the "team" field
 };
+
+export const PersonHeaders = [
+  "name",
+  "employeeCode",
+  "pubkey", // Add the "pubkey" header
+  "designation",
+  "team",
+  "salary",
+  "contactNumber",
+  "address",
+  // Add the "Team" header
+];
 
 const generateRandomNumber = (min: number, max: number): number => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -26,12 +43,15 @@ export const generatePeopleData = (): Person[] => {
   const peopleData: Person[] = [];
 
   for (let i = 1; i <= 20; i++) {
+    const keypair = Keypair.generate();
     const person: Person = {
-      name: `Person ${i}`,
+      id: i,
+      name: `Person_${i}`,
       employeeCode: `EMP${generateRandomNumber(1000, 9999)}`,
       contactNumber: generateRandomContactNumber(),
       designation: `Designation ${i}`,
       address: `Address ${i}`,
+      pubkey: keypair.publicKey.toString(), // Assign a random public key
       salary: generateRandomNumber(50000, 120000),
       team: teams[generateRandomNumber(0, teams.length - 1)], // Assign a random team
     };

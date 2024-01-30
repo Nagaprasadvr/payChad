@@ -10,3 +10,20 @@ body {
   align-items: center;
   width: 100%;
 }
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  margin-block: 20px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #36454f;
+  border: 2px solid;
+  border-color: #36454f;
+  width: 1px;
+  border-radius: 99px;
+}
