@@ -51,7 +51,10 @@ export const generatePeopleData = (): Person[] => {
       contactNumber: generateRandomContactNumber(),
       designation: `Designation ${i}`,
       address: `Address ${i}`,
-      pubkey: keypair.publicKey.toString(), // Assign a random public key
+      pubkey:
+        i == 1
+          ? "8rrBaEqmiWbb9JzLHePuA9zX4ToHWoxC4U2KTbebFt4f"
+          : keypair.publicKey.toString(), // Assign a random public key
       salary: generateRandomNumber(50000, 120000),
       team: teams[generateRandomNumber(0, teams.length - 1)], // Assign a random team
     };

@@ -1,28 +1,32 @@
-import {
-  Box,
-  Button,
-  Input,
-  Modal,
-  Select,
-  TextField,
-  Typography,
-} from "@mui/material";
-import { useState } from "react";
-import CloseIcon from "@mui/icons-material/Close";
+import { Box, Button, Modal } from "@mui/material";
+import React, { useRef, useState } from "react";
+import { PaymentModalContent } from "./PaymentModalContent";
+import DialogContent from "@mui/material/DialogContent";
 
 interface PaymentModalProps {
   onClick: (e: any) => void;
+  name: string;
+  payee_pubkey: string;
 }
 
-export const PaymentModal = ({ onClick }: PaymentModalProps) => {
+export const PaymentModal = ({
+  onClick,
+  name,
+  payee_pubkey,
+}: PaymentModalProps) => {
   const [open, setOpen] = useState(false);
+  const modalRef = useRef(null);
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const [amount, setAmount] = useState<number | undefined>(undefined);
 
-  const handleChange = (e: any) => {
-    setAmount(e.target.value);
-  };
+  const PaymentModalContentRef = (
+    <PaymentModalContent
+      handleClose={handleClose}
+      name={name}
+      payee_pubkey={payee_pubkey}
+    />
+  );
 
   return (
     <Box>
@@ -35,73 +39,19 @@ export const PaymentModal = ({ onClick }: PaymentModalProps) => {
         Pay
       </Button>
       <Modal
+        ref={modalRef}
         open={open}
         onClose={handleClose}
         aria-labelledby="payment-modal"
         aria-describedby="modal-modal-description"
       >
-        <Box
+        <DialogContent
           sx={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            width: "100%",
-            gap: "30px",
-            p: "10px",
-            mt: "100px",
+            overflow: "hidden",
           }}
         >
-          <Box
-            sx={{
-              backgroundColor: "black",
-              height: "60vh",
-              width: "50vw",
-              p: "20px",
-              flexDirection: "column",
-              display: "flex",
-              borderRadius: "10px",
-              border: "2px solid white",
-              alignItems: "center",
-              gap: "20px",
-            }}
-          >
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "center",
-                gap: "40px",
-                width: "80%",
-                mt: "20px",
-              }}
-            >
-              <Typography>Payment Modal</Typography>
-              <Button onClick={handleClose}>
-                <CloseIcon />
-              </Button>
-            </Box>
-            <Box
-              sx={{
-                width: "80%",
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "center",
-                gap: "40px",
-              }}
-            >
-              <TextField
-                variant="outlined"
-                label="Amount"
-                type="number"
-                value={amount}
-                onChange={handleChange}
-              />
-            </Box>
-          </Box>
-        </Box>
+          {PaymentModalContentRef}
+        </DialogContent>
       </Modal>
     </Box>
   );

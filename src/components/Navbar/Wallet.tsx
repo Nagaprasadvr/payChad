@@ -92,7 +92,7 @@ export const Wallet = () => {
                   }}
                   onClick={handleClick}
                 >
-                  {publicKey && (
+                  {publicKey && connected && (
                     <Typography>
                       {minimizePubkey(publicKey.toBase58())}
                     </Typography>

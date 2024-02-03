@@ -48,7 +48,7 @@ export const Navbar = () => {
           }}
         >
           <Image src="/salary-envelope.png" height={40} width={40} alt="logo" />
-          {/* <Typography fontSize={"20px"}>PayChad</Typography> */}
+
           <Box
             sx={{
               display: "flex",

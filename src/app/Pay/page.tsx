@@ -1,29 +1,110 @@
 "use client";
-import { Box, Button, Input, Typography } from "@mui/material";
+import { Box, Button, Input, Tooltip, Typography } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@mui/icons-material/Search";
 import { useState, useEffect } from "react";
-import { Person, generatePeopleData } from "../Chads/data";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { generatePeopleData } from "../Chads/data";
+import { DataGrid, GridColDef, GridKeyValue } from "@mui/x-data-grid";
 import { PaymentModal } from "@/components/PaymentModal/PaymentModal";
+import { getRow, minimizePubkey } from "@/utils/helpers";
+import CopyIcon from "@mui/icons-material/ContentCopy";
 
 interface Data {
   id: number;
   name: string;
-  action: JSX.Element;
+  pubkey: string;
 }
 
 const columns: GridColDef[] = [
   { field: "id", headerName: "ID", width: 100 },
-  { field: "name", headerName: "Name", width: 200 },
+  {
+    field: "name",
+    headerName: "Name",
+    width: 200,
+    renderCell: (params) => {
+      const thisRow: Record<string, GridKeyValue> = getRow(params);
+      return (
+        <Typography
+          fontSize={"15px"}
+          sx={{
+            backgroundColor: "lightseagreen",
+            color: "black",
+            padding: "5px",
+            borderRadius: "10px",
+          }}
+        >
+          {thisRow["name"]}
+        </Typography>
+      );
+    },
+  },
+  {
+    field: "pubkey",
+    headerName: "Wallet Address",
+    width: 200,
+    renderCell: (params) => {
+      const thisRow: Record<string, GridKeyValue> = getRow(params);
+      return (
+        <Tooltip title={thisRow["pubkey"] as string}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              gap: "10px",
+              alignItems: "center",
+            }}
+          >
+            <Typography
+              fontSize={"15px"}
+              sx={{
+                backgroundColor: "lightblue",
+                color: "black",
+                padding: "5px",
+                borderRadius: "10px",
+              }}
+            >
+              {minimizePubkey(thisRow["pubkey"] as string)}
+            </Typography>
+            <Button
+              sx={{
+                backgroundColor: "transparent",
+                color: "white",
+                "&:hover": {
+                  backgroundColor: "transparent",
+                  color: "white",
+                },
+              }}
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+            >
+              <CopyIcon
+                sx={{
+                  fontSize: "20px",
+                  cursor: "pointer",
+                }}
+              />
+            </Button>
+          </Box>
+        </Tooltip>
+      );
+    },
+  },
   {
     field: "action",
     headerName: "Action",
-    renderCell: () => {
+    renderCell: (params) => {
       const onClick = (e: any) => {
         e.stopPropagation();
       };
-      return <PaymentModal onClick={onClick} />;
+      const thisRow: Record<string, GridKeyValue> = getRow(params);
+      return (
+        <PaymentModal
+          onClick={onClick}
+          name={thisRow["name"] as string}
+          payee_pubkey={thisRow["pubkey"] as string}
+        />
+      );
     },
   },
 ];
@@ -32,13 +113,7 @@ const Pay = () => {
   const staticData = generatePeopleData().map((d) => ({
     id: d.id,
     name: d.name,
-    action: (
-      <PaymentModal
-        onClick={(e) => {
-          e.stopPropagation();
-        }}
-      />
-    ),
+    pubkey: d.pubkey,
   }));
   const [showSearch, setShowSearch] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -47,7 +122,8 @@ const Pay = () => {
 
   useEffect(() => {
     const fetchData = () => {
-      const filteredData = data.filter((d) =>
+      console.log("trigger");
+      const filteredData = staticData.filter((d) =>
         d.name.toLowerCase().includes(searchString.toLowerCase())
       );
       setData(filteredData);
@@ -59,12 +135,12 @@ const Pay = () => {
     if (showSearch == false) {
       setData(staticData);
     }
+    if (searchString === "") {
+      setData(staticData);
+    }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchString, showSearch]);
-
-  console.log("data", data);
-  console.log("loading", loading);
 
   return (
     <Box

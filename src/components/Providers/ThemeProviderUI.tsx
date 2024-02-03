@@ -11,14 +11,14 @@ const darkTheme = createTheme({
     fontSize: 15,
   },
   components: {
-    MuiModal: {
-      styleOverrides: {
-        root: {
-          zIndex: 9999,
-          backdropFilter: "blur(5px)",
-        },
-      },
-    },
+    // MuiModal: {
+    //   styleOverrides: {
+    //     root: {
+    //       zIndex: 9999,
+    //       backdropFilter: "blur(3px)",
+    //     },
+    //   },
+    // },
     MuiOutlinedInput: {
       styleOverrides: {
         root: {
@@ -30,13 +30,19 @@ const darkTheme = createTheme({
         },
       },
     },
+    MuiPopover: {
+      styleOverrides: {
+        root: {
+          zIndex: 9999,
+          color: "white",
+        },
+      },
+    },
     MuiSelect: {
       styleOverrides: {
         root: {
           color: "white",
           backgroundColor: "black",
-          border: "1px solid white",
-          borderRadius: "10px",
         },
       },
     },
@@ -63,6 +69,18 @@ const darkTheme = createTheme({
             backgroundColor: "white",
             color: "grey",
           },
+        },
+      },
+    },
+    MuiTooltip: {
+      styleOverrides: {
+        tooltip: {
+          backgroundColor: "#36454F",
+          color: "whitesmoke",
+          fontSize: "15px",
+          fontWeight: "bold",
+          borderRadius: "10px",
+          padding: "10px",
         },
       },
     },

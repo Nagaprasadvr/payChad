@@ -1,18 +1,106 @@
 "use client";
 import { Box, Button, Input, Typography } from "@mui/material";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { generatePeopleData } from "../Chads/data";
-import toast from "react-hot-toast";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { PayrollTransaction, generateRandomTransaction } from "./data";
+import { getRow } from "@/utils/helpers";
+import { paymentTypeColorMap, sourceColorMap, tokenColorMap } from "./helpers";
+import { TokenIcons } from "@/utils/constants";
 
 const PayrollHistoryDataPage = () => {
-  const [name, setName] = useState("");
-  const router = useRouter();
+  const staticData = generateRandomTransaction();
+  const [transactions, setTransactions] =
+    useState<PayrollTransaction[]>(staticData);
 
-  const isNameValid = (name: string) => {
-    const data = generatePeopleData();
-    return Boolean(data.find((d) => d.name.toLowerCase() === name));
-  };
+  const columns: GridColDef[] = [
+    { field: "id", headerName: "ID", width: 100 },
+    { field: "txId", headerName: "Transaction ID", width: 150 },
+    { field: "sentTo", headerName: "Sent To", width: 150 },
+    {
+      field: "amount",
+      headerName: "Amount",
+      width: 140,
+      renderCell: (params) => {
+        const row = getRow(params);
+        return <Typography>{row["amount"].toLocaleString()}</Typography>;
+      },
+    },
+    {
+      field: "tokenName",
+      headerName: "Token",
+      width: 140,
+      renderCell: (params) => {
+        const row = getRow(params);
+        const token = row["tokenName"] as string;
+        return (
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              gap: "10px",
+            }}
+          >
+            {TokenIcons[token as keyof typeof TokenIcons]}
+            <Typography>{token}</Typography>
+          </Box>
+        );
+      },
+    },
+    {
+      field: "source",
+      headerName: "Source",
+      width: 140,
+      renderCell: (params) => {
+        const row = getRow(params);
+        const source = row["source"] as string;
+        return (
+          <Typography
+            sx={{
+              backgroundColor:
+                sourceColorMap[source as keyof typeof sourceColorMap],
+              color: "black",
+              padding: "3px",
+              borderRadius: "10px",
+              width: "100%",
+              textAlign: "center",
+            }}
+          >
+            {source}
+          </Typography>
+        );
+      },
+    },
+    {
+      field: "paymentType",
+      headerName: "Payment Type",
+      width: 200,
+      renderCell: (params) => {
+        const row = getRow(params);
+        const paymentType = row["paymentType"] as string;
+        return (
+          <Typography
+            sx={{
+              backgroundColor:
+                paymentTypeColorMap[
+                  paymentType as keyof typeof paymentTypeColorMap
+                ],
+              color: "black",
+              padding: "3px",
+              borderRadius: "10px",
+              width: "100%",
+              textAlign: "center",
+            }}
+          >
+            {paymentType}
+          </Typography>
+        );
+      },
+    },
+    { field: "date", headerName: "Date", width: 140 },
+    { field: "time", headerName: "Time", width: 140 },
+  ];
 
   return (
     <Box
@@ -21,46 +109,36 @@ const PayrollHistoryDataPage = () => {
         justifyContent: "center",
         alignItems: "center",
         flexDirection: "column",
-        height: "80vh",
+        gap: "40px",
       }}
     >
-      {/* <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "20px",
-          width: "fit-content",
-          p: "20px",
-          borderRadius: "10px",
-          border: "2px solid white",
-        }}
-      >
-        <Typography fontWeight="bold" fontSize={"20px"} color="white">
-          Please enter name
-        </Typography>
-        <Input
-          value={name}
-          onChange={(e) => {
-            setName(e.target.value);
-          }}
-        ></Input>
-
-        <Button
+      <Box>
+        <Typography>Payroll History</Typography>
+      </Box>
+      <Box>
+        <DataGrid
           sx={{
-            width: "100%",
+            ".MuiDataGrid-cell": {
+              color: "whitesmoke",
+              fontWeight: "bold",
+              backgroundColor: "transparent",
+            },
+            ".css-t89xny-MuiDataGrid-columnHeaderTitle": {
+              color: "whitesmoke",
+              fontWeight: "bold",
+            },
           }}
-          onClick={() => {
-            if (!isNameValid(name)) {
-              toast.error("Name does not exits in database");
-              return;
-            }
-            router.push(`/PayrollHistory/${name}`);
+          rows={transactions}
+          columns={columns}
+          initialState={{
+            pagination: {
+              paginationModel: { page: 0, pageSize: 10 },
+            },
           }}
-        >
-          Submit
-        </Button>
-      </Box> */}
-      <Typography>Payroll History</Typography>
+          pageSizeOptions={[5, 10]}
+          checkboxSelection
+        />
+      </Box>
     </Box>
   );
 };

@@ -12,7 +12,6 @@ const AddChads = () => {
   };
 
   const handleAddChad = () => {
-    console.log(data);
     const errors = validateAddChadData(data);
     if (errors.length > 0) {
       errors.forEach((err) => toast.error(err));

@@ -12,6 +12,7 @@ export const ToastProviderUI = () => {
           width: "100x",
           fontFamily: '"Courier New", Courier, monospace',
           fontWeight: "600",
+          zIndex: 999999,
         },
       }}
     ></Toaster>
