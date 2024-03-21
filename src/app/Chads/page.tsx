@@ -2,7 +2,7 @@
 import { Box, Button, Input, Typography } from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { useEffect, useMemo, useState } from "react";
-import { Person, generatePeopleData } from "./data";
+import { Chad, generatePeopleData } from "./data";
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
 import { useRouter } from "next/navigation";
@@ -10,7 +10,7 @@ import { searchFilter } from "./helpers";
 
 const Chads = () => {
   const router = useRouter();
-  const [peopleData, setPeopleData] = useState<Person[]>([]);
+  const [peopleData, setPeopleData] = useState<Chad[]>([]);
   const [showSearch, setShowSearch] = useState(false);
   const [searchString, setSearchString] = useState("");
   useEffect(() => {
@@ -107,7 +107,7 @@ const Chads = () => {
               alignItems: "center",
               justifyContent: "center",
               border: "2px solid aliceblue",
-              width: "80%",
+              width: "90%",
               borderRadius: "10px",
               paddingLeft: "10px",
               paddingRight: "10px",
@@ -118,10 +118,11 @@ const Chads = () => {
                 display: "grid",
                 gridTemplateColumns: "repeat(4, 1fr)",
                 flexDirection: "column",
-                justifyContent: "flex-start",
+                justifyContent: "stretch",
                 padding: "20px",
-                width: "100%",
-                gap: "12px",
+                width: "95%",
+                gap: "20px",
+                overflow: "auto",
               }}
             >
               <Box
@@ -217,11 +218,12 @@ const Chads = () => {
                   flexDirection: "row",
                   gap: "10px",
                   alignItems: "center",
+                  width: "fit-content",
                 }}
               >
                 <Typography
                   sx={{
-                    padding: "2px",
+                    padding: "4px",
                     borderRadius: "10px",
                     backgroundColor: "purple",
                     color: "whitesmoke",
@@ -259,7 +261,7 @@ const Chads = () => {
             </Box>
             <Box
               sx={{
-                width: "100%",
+                width: "-webkit-fill-available",
                 height: "3px",
                 backgroundColor: "aliceblue",
               }}

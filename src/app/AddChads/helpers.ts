@@ -1,4 +1,4 @@
-import { Person } from "../Chads/data";
+import { Chad } from "../Chads/data";
 
 export const personHeaderColors = [
   // Add the "key" field
@@ -12,7 +12,7 @@ export const personHeaderColors = [
   "coral",
 ];
 
-export const validateAddChadData = (data: Person) => {
+export const validateAddChadData = (data: Chad) => {
   const errors: string[] = [];
 
   if (!data.name || data.name.trim() === "") {
@@ -49,12 +49,12 @@ export const validateAddChadData = (data: Person) => {
       }
     }
 
-    if (data.employeeCode) {
-      const regex = /^[A-Z]{3}\d{4}$/;
-      if (!regex.test(data.employeeCode)) {
-        errors.push("Employee Code is invalid");
-      }
-    }
+    // if (data.employeeCode) {
+    //   const regex = /^[A-Z]{3}\d{4}$/;
+    //   if (!regex.test(data.employeeCode)) {
+    //     errors.push("Employee Code is invalid");
+    //   }
+    // }
   }
 
   return errors;

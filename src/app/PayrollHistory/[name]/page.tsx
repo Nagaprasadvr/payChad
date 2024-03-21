@@ -1,7 +1,7 @@
 "use client";
 import { Box, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { PayrollTransaction, generatePayrollData } from "./data";
+import { PayrollTransactionIndividual, generatePayrollData } from "./data";
 import { DataGrid } from "@mui/x-data-grid";
 import { useParams } from "next/navigation";
 
@@ -25,7 +25,7 @@ const columns = [
 ];
 
 const PayrollHistory = () => {
-  const [history, setHistory] = useState<PayrollTransaction[]>([]);
+  const [history, setHistory] = useState<PayrollTransactionIndividual[]>([]);
 
   const params = useParams();
   const { name } = params;

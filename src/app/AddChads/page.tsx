@@ -1,22 +1,64 @@
 "use client";
-import { Box, Button, Input, Typography } from "@mui/material";
-import { Person, PersonHeaders } from "../Chads/data";
+import {
+  Box,
+  Button,
+  Input,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
+import { Chad, PersonHeaders } from "../Chads/data";
 import { personHeaderColors, validateAddChadData } from "./helpers";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import toast from "react-hot-toast";
 
 const AddChads = () => {
-  const [data, setData] = useState<Person>({} as Person);
+  const { breakpoints } = useTheme();
+  const smallScreen = useMediaQuery(breakpoints.down("lg"));
+  console.log("smallScreen", smallScreen);
+  const [data, setData] = useState<Chad>({} as Chad);
   const handleInputChange = (e: any, key: string) => {
     setData({ ...data, [key]: e.target.value });
   };
 
+  const grids = useMemo(() => {
+    if (smallScreen) {
+      return "1fr";
+    } else {
+      return "repeat(2, 1fr)";
+    }
+  }, [smallScreen]);
   const handleAddChad = () => {
     const errors = validateAddChadData(data);
     if (errors.length > 0) {
       errors.forEach((err) => toast.error(err));
       return;
     }
+
+    const id = toast.loading("Adding Chad...");
+    // Add Chad to the database
+    const url = "/api/chad";
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ chadData: data }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.status === "success") {
+          toast.dismiss(id);
+          toast.success(res.message);
+        } else {
+          toast.dismiss(id);
+          toast.error(res.message);
+        }
+      })
+      .catch((err) => {
+        toast.dismiss(id);
+        toast.error("Failed to add chad");
+      });
   };
 
   return (
@@ -25,6 +67,7 @@ const AddChads = () => {
         display: "flex",
         flexDirection: "column",
         gap: "30px",
+        width: "100%",
       }}
     >
       <Box
@@ -60,16 +103,18 @@ const AddChads = () => {
             border: "2px solid white",
             borderRadius: "10px",
             gap: "30px",
+            width: smallScreen ? "70vw" : "80vw",
           }}
         >
           <Box
             sx={{
               display: "grid",
-              gridTemplateColumns: "repeat(2, 1fr)",
+              gridTemplateColumns: grids,
               gap: "20px",
-              width: "fit-content",
               justifyContent: "center",
               alignItems: "center",
+
+              width: "100%",
             }}
           >
             {PersonHeaders.map((header, idx) => (
@@ -77,14 +122,14 @@ const AddChads = () => {
                 key={header}
                 sx={{
                   display: "flex",
-                  flexDirection: "row",
+                  flexDirection: { xs: "column", lg: "row" },
                   gap: "10px",
-                  width: "500px",
+                  width: "100%",
                 }}
               >
                 <Box
                   sx={{
-                    width: "40%",
+                    width: { xs: "100%", lg: "40%" },
                   }}
                 >
                   <Typography
@@ -114,7 +159,7 @@ const AddChads = () => {
                     }
                     fullWidth
                     multiline={header.toLowerCase() === "address"}
-                    value={data[header]}
+                    value={data[header as keyof Chad]}
                     onChange={(e) => handleInputChange(e, header)}
                   ></Input>
                 </Box>

@@ -8,6 +8,7 @@ export type PayrollTransaction = {
   paymentType: string; // Add more types as needed
   date: string;
   time: string;
+  status: string; // Add more statuses as needed
 };
 
 export const generateRandomNumber = (min: number, max: number): number => {
@@ -41,7 +42,7 @@ export const generateRandomTransaction = (): PayrollTransaction[] => {
       const tx = {
         id: i,
         txId: generateRandomNumber(100000, 999999).toString(),
-        sentTo: `Person ${generateRandomNumber(1, 20)}`,
+        sentTo: `Chad ${generateRandomNumber(1, 20)}`,
         amount: randomAmount,
         tokenName: token,
         source,
@@ -50,6 +51,7 @@ export const generateRandomTransaction = (): PayrollTransaction[] => {
         ],
         date: randomDate,
         time: randomTime,
+        status: ["pending", "completed"][generateRandomNumber(0, 1)],
       };
       transactions.push(tx);
     }

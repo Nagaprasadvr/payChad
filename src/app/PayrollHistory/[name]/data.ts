@@ -1,4 +1,4 @@
-export type PayrollTransaction = {
+export type PayrollTransactionIndividual = {
   id: number;
   txId: string;
   date: string;
@@ -32,11 +32,11 @@ const generateRandomNumber = (min: number, max: number): number => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-export const generatePayrollData = (): PayrollTransaction[] => {
-  const payrollData: PayrollTransaction[] = [];
+export const generatePayrollData = (): PayrollTransactionIndividual[] => {
+  const payrollData: PayrollTransactionIndividual[] = [];
 
   for (let i = 1; i <= 10; i++) {
-    const transaction: PayrollTransaction = {
+    const transaction: PayrollTransactionIndividual = {
       id: i,
       txId: `TX${generateRandomNumber(1000, 9999)}`,
       date: `2023-01-${i < 10 ? "0" + i : i}`,

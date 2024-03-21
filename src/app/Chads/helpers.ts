@@ -1,6 +1,6 @@
-import { Person } from "./data";
+import { Chad } from "./data";
 
-export const searchFilter = (data: Person[], searchQuery: string) => {
+export const searchFilter = (data: Chad[], searchQuery: string) => {
   const lowercasedValue = searchQuery.toLowerCase().trim();
   if (lowercasedValue === "") return data;
   const filteredData = data.filter((item) => {

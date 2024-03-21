@@ -1,13 +1,21 @@
 "use client";
-import { Box, Button, Input, Tooltip, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Input,
+  Skeleton,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@mui/icons-material/Search";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { generatePeopleData } from "../Chads/data";
 import { DataGrid, GridColDef, GridKeyValue } from "@mui/x-data-grid";
 import { PaymentModal } from "@/components/PaymentModal/PaymentModal";
-import { getRow, minimizePubkey } from "@/utils/helpers";
+import { SkeletonRows, getRow, minimizePubkey } from "@/utils/helpers";
 import CopyIcon from "@mui/icons-material/ContentCopy";
+import { LoadingIcon } from "@/components/LoadingIcon";
 
 interface Data {
   id: number;
@@ -27,7 +35,7 @@ const columns: GridColDef[] = [
         <Typography
           fontSize={"15px"}
           sx={{
-            backgroundColor: "lightseagreen",
+            backgroundColor: "lightcyan",
             color: "black",
             padding: "5px",
             borderRadius: "10px",
@@ -116,31 +124,34 @@ const Pay = () => {
     pubkey: d.pubkey,
   }));
   const [showSearch, setShowSearch] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [searchString, setSearchString] = useState("");
-  const [data, setData] = useState<Data[]>(staticData);
+  const [data, setData] = useState<Data[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchData = () => {
-      console.log("trigger");
-      const filteredData = staticData.filter((d) =>
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const res = await fetch("/api/chad");
+        const data = await res.json();
+        setData(data.chads);
+      } catch (e) {
+        console.log(e);
+      }
+      setLoading(false);
+    };
+    fetchData();
+  }, []);
+
+  const dataToDisplay = useMemo(() => {
+    if (showSearch && searchString !== "") {
+      const filteredData = data.filter((d) =>
         d.name.toLowerCase().includes(searchString.toLowerCase())
       );
-      setData(filteredData);
-    };
-
-    if (showSearch && searchString !== "") {
-      fetchData();
+      return filteredData;
     }
-    if (showSearch == false) {
-      setData(staticData);
-    }
-    if (searchString === "") {
-      setData(staticData);
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchString, showSearch]);
+    return data;
+  }, [showSearch, searchString, data]);
 
   return (
     <Box
@@ -196,15 +207,16 @@ const Pay = () => {
           </>
         )}
       </Box>
-      {data.length > 0 && (
-        <Box
-          sx={{
-            padding: "20px",
-            m: "10px",
-            alignItems: "center",
-            gap: "20px",
-          }}
-        >
+
+      <Box
+        sx={{
+          padding: "20px",
+          m: "10px",
+          alignItems: "center",
+          gap: "20px",
+        }}
+      >
+        {!loading && data.length > 0 ? (
           <DataGrid
             sx={{
               ".MuiDataGrid-cell": {
@@ -218,7 +230,7 @@ const Pay = () => {
               },
               borderCollapse: "white",
             }}
-            rows={data}
+            rows={dataToDisplay}
             columns={columns}
             initialState={{
               pagination: {
@@ -228,8 +240,12 @@ const Pay = () => {
             pageSizeOptions={[5, 10]}
             checkboxSelection
           />
-        </Box>
-      )}
+        ) : !loading && data.length === 0 ? (
+          <Typography>No chads found</Typography>
+        ) : (
+          <SkeletonRows rows={12} />
+        )}
+      </Box>
     </Box>
   );
 };

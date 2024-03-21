@@ -1,20 +1,62 @@
 "use client";
-import { Box, Button, Input, Typography } from "@mui/material";
-import { useState } from "react";
+import {
+  Box,
+  Button,
+  Input,
+  Skeleton,
+  Tooltip,
+  Typography,
+} from "@mui/material";
+import { useEffect, useState } from "react";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { PayrollTransaction, generateRandomTransaction } from "./data";
-import { getRow } from "@/utils/helpers";
+import { SkeletonRows, getRow, reduceSignature } from "@/utils/helpers";
 import { paymentTypeColorMap, sourceColorMap, tokenColorMap } from "./helpers";
 import { TokenIcons } from "@/utils/constants";
 
 const PayrollHistoryDataPage = () => {
-  const staticData = generateRandomTransaction();
-  const [transactions, setTransactions] =
-    useState<PayrollTransaction[]>(staticData);
+  const [transactions, setTransactions] = useState<PayrollTransaction[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      console.log("Fetching data");
+      try {
+        const res = await fetch("/api/payrollTx", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const resJson = await res.json();
+        if (resJson.status === "success") {
+          setTransactions(resJson.data);
+          console.log(resJson.data);
+          setLoading(false);
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 100 },
-    { field: "txId", headerName: "Transaction ID", width: 150 },
+    {
+      field: "txId",
+      headerName: "Transaction ID",
+      width: 150,
+      renderCell: (params) => {
+        const row = getRow(params);
+        return (
+          <Tooltip title={row["txId"]}>
+            <Typography>{reduceSignature(row["txId"] as string)}</Typography>
+          </Tooltip>
+        );
+      },
+    },
     { field: "sentTo", headerName: "Sent To", width: 150 },
     {
       field: "amount",
@@ -22,7 +64,13 @@ const PayrollHistoryDataPage = () => {
       width: 140,
       renderCell: (params) => {
         const row = getRow(params);
-        return <Typography>{row["amount"].toLocaleString()}</Typography>;
+        return (
+          <Typography>
+            {row["amount"].toLocaleString("en", {
+              maximumFractionDigits: 9,
+            })}
+          </Typography>
+        );
       },
     },
     {
@@ -100,6 +148,7 @@ const PayrollHistoryDataPage = () => {
     },
     { field: "date", headerName: "Date", width: 140 },
     { field: "time", headerName: "Time", width: 140 },
+    { field: "status", headerName: "Status", width: 140 },
   ];
 
   return (
@@ -115,29 +164,44 @@ const PayrollHistoryDataPage = () => {
       <Box>
         <Typography>Payroll History</Typography>
       </Box>
-      <Box>
-        <DataGrid
-          sx={{
-            ".MuiDataGrid-cell": {
-              color: "whitesmoke",
-              fontWeight: "bold",
-              backgroundColor: "transparent",
-            },
-            ".css-t89xny-MuiDataGrid-columnHeaderTitle": {
-              color: "whitesmoke",
-              fontWeight: "bold",
-            },
-          }}
-          rows={transactions}
-          columns={columns}
-          initialState={{
-            pagination: {
-              paginationModel: { page: 0, pageSize: 10 },
-            },
-          }}
-          pageSizeOptions={[5, 10]}
-          checkboxSelection
-        />
+      <Box
+        sx={{
+          padding: "20px",
+          m: "10px",
+          alignItems: "center",
+          gap: "20px",
+          width: "90%",
+          justifyContent: "center",
+        }}
+      >
+        {loading ? (
+          <SkeletonRows rows={10} />
+        ) : transactions.length > 0 ? (
+          <DataGrid
+            sx={{
+              ".MuiDataGrid-cell": {
+                color: "whitesmoke",
+                fontWeight: "bold",
+                backgroundColor: "transparent",
+              },
+              ".css-t89xny-MuiDataGrid-columnHeaderTitle": {
+                color: "whitesmoke",
+                fontWeight: "bold",
+              },
+            }}
+            rows={transactions}
+            columns={columns}
+            initialState={{
+              pagination: {
+                paginationModel: { page: 0, pageSize: 10 },
+              },
+            }}
+            pageSizeOptions={[5, 10]}
+            checkboxSelection
+          />
+        ) : (
+          <Typography>No transactions found</Typography>
+        )}
       </Box>
     </Box>
   );

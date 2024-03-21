@@ -9,7 +9,7 @@ export const ToastProviderUI = () => {
         style: {
           color: "black",
           backgroundColor: "white",
-          width: "100x",
+          width: "fit-content",
           fontFamily: '"Courier New", Courier, monospace',
           fontWeight: "600",
           zIndex: 999999,

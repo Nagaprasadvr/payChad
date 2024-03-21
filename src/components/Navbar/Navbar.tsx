@@ -1,10 +1,17 @@
 "use client";
-import { Box, Button, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import Link from "next/link";
 import Image from "next/image";
 import { Wallet } from "./Wallet";
+import { MobileNav } from "./MobileNav";
 
-const NavLinks = [
+export const NavLinks = [
   { name: "Home", link: "/", color: "cyan" },
   { name: "PayChad", link: "/Pay", color: "lightblue" },
   { name: "PayrollHistory", link: "/PayrollHistory", color: "coral" },
@@ -13,6 +20,8 @@ const NavLinks = [
 ];
 
 export const Navbar = () => {
+  const { breakpoints } = useTheme();
+  const mobileScreen = useMediaQuery(breakpoints.down("md"));
   return (
     <nav
       style={{
@@ -32,6 +41,7 @@ export const Navbar = () => {
         sx={{
           display: "flex",
           flexDirection: "row",
+          gap: "20px",
         }}
       >
         <Box
@@ -39,7 +49,7 @@ export const Navbar = () => {
           flexDirection={"row"}
           gap="10px"
           ml="20px"
-          width={"20%"}
+          width={mobileScreen ? "10%" : "20%"}
           minWidth={"250px"}
           justifyContent={"flex-start"}
           alignItems={"center"}
@@ -81,7 +91,7 @@ export const Navbar = () => {
 
         <Box
           sx={{
-            display: "flex",
+            display: mobileScreen ? "none" : "flex",
             gap: "10px",
             justifyContent: "center",
             paddingRight: "20px",
@@ -113,12 +123,23 @@ export const Navbar = () => {
       </Box>
 
       <Box
+        display={mobileScreen ? "none" : "flex"}
         sx={{
           mr: "20px",
           ml: "20px",
         }}
       >
         <Wallet />
+      </Box>
+      <Box
+        sx={{
+          display: mobileScreen ? "flex" : "none",
+          gap: "10px",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <MobileNav />
       </Box>
     </nav>
   );

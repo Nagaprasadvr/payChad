@@ -1,7 +1,6 @@
 import { Keypair } from "@solana/web3.js";
 
-export type Person = {
-  [key: string]: any; // Add the "key" field
+export type Chad = {
   id: number;
   name: string;
   employeeCode: string;
@@ -38,13 +37,13 @@ const generateRandomContactNumber = (): string => {
   )}-${phoneNumber.slice(6)}`;
 };
 
-export const generatePeopleData = (): Person[] => {
+export const generatePeopleData = (): Chad[] => {
   const teams = ["Team A", "Team B", "Team C", "Team D"]; // Define possible team names
-  const peopleData: Person[] = [];
+  const peopleData: Chad[] = [];
 
   for (let i = 1; i <= 20; i++) {
     const keypair = Keypair.generate();
-    const person: Person = {
+    const person: Chad = {
       id: i,
       name: `Person_${i}`,
       employeeCode: `EMP${generateRandomNumber(1000, 9999)}`,
