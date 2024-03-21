@@ -2,6 +2,7 @@ html,
 body {
   color: whitesmoke;
   background-color: black;
+  font-family: "Courier New", Courier, monospace;
 }
 
 .center {
