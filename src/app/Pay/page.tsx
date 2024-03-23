@@ -111,11 +111,6 @@ const columns: GridColDef[] = [
 ];
 
 const Pay = () => {
-  const staticData = generatePeopleData().map((d) => ({
-    id: d.id,
-    name: d.name,
-    pubkey: d.pubkey,
-  }));
   const [showSearch, setShowSearch] = useState(false);
   const [searchString, setSearchString] = useState("");
   const [data, setData] = useState<Data[]>([]);
@@ -128,7 +123,7 @@ const Pay = () => {
         const res = await fetch("/api/chad");
         const data = await res.json();
         const filteredData = data?.chads?.map((d: any, index: number) => ({
-          id: d.id,
+          id: d._id,
           name: d.name,
           pubkey: d.pubkey,
         }));

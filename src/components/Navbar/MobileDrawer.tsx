@@ -9,6 +9,7 @@ import Link from "next/link";
 import { CHARCOAL } from "@/utils/constants";
 import CloseIcon from "@mui/icons-material/Close";
 import { useRouter } from "next/navigation";
+import { Wallet } from "./Wallet";
 
 export const MobDrawer = () => {
   const [open, setOpen] = React.useState(false);
@@ -39,14 +40,16 @@ export const MobDrawer = () => {
         justifyContent: "flex-start",
         alignItems: "flex-start",
         borderLeft: `0.5px solid ${CHARCOAL}`,
+        gap: "20px",
       }}
       role="presentation"
-      onClick={toggleDrawer(false)}
     >
       <Box
         sx={{
           width: "100%",
-          p: "20px",
+          pl: "20px",
+          pt: "20px",
+          pb: "20px",
           borderBottom: `1px solid ${CHARCOAL}`,
         }}
       >
@@ -69,6 +72,7 @@ export const MobDrawer = () => {
           }}
           onClick={() => {
             handleOnClick(nav.link);
+            toggleDrawer(false);
           }}
         >
           <Button
@@ -86,11 +90,25 @@ export const MobDrawer = () => {
           </Button>
         </Box>
       ))}
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          padding: "20px",
+        }}
+      >
+        <Wallet />
+      </Box>
     </Box>
   );
 
   return (
-    <Box>
+    <Box
+      sx={{
+        overflow: "hidden",
+      }}
+    >
       <Button onClick={toggleDrawer(true)}>
         <MenuIcon />
       </Button>

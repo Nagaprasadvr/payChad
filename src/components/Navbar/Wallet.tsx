@@ -38,12 +38,6 @@ export const Wallet = () => {
     setAnchorEl(null);
   };
 
-  useEffect(() => {
-    if (connected) {
-      toast.success("Connected to wallet !");
-    }
-  }, [connected]);
-
   return (
     <>
       {!connected ? (

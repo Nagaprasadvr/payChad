@@ -4,10 +4,6 @@ mongoose.connect(process.env.MONGODB_PROD_URI as string);
 mongoose.Promise = global.Promise;
 
 const PayrollTransactionSchema = new Schema({
-  id: {
-    type: Number,
-    required: true,
-  },
   txId: {
     type: String,
     required: true,

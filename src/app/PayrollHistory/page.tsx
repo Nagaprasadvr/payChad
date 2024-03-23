@@ -23,7 +23,13 @@ const PayrollHistoryDataPage = () => {
         });
         const resJson = await res.json();
         if (resJson.status === "success") {
-          setTransactions(resJson.data);
+          const formattedData = resJson?.data?.map((d: PayrollTransaction) => {
+            return {
+              ...d,
+              id: d.txId,
+            };
+          });
+          setTransactions(formattedData ?? []);
           setLoading(false);
         }
       } catch (e) {

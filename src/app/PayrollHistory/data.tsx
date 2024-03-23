@@ -1,5 +1,4 @@
 export type PayrollTransaction = {
-  id: number;
   txId: string;
   sentTo: string;
   amount: number;
@@ -40,7 +39,6 @@ export const generateRandomTransaction = (): PayrollTransaction[] => {
           ? "ETH"
           : "SOL";
       const tx = {
-        id: i,
         txId: generateRandomNumber(100000, 999999).toString(),
         sentTo: `Chad ${generateRandomNumber(1, 20)}`,
         amount: randomAmount,

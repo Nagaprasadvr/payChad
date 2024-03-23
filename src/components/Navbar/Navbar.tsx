@@ -122,25 +122,29 @@ export const Navbar = () => {
         </Box>
       </Box>
 
-      <Box
-        display={mobileScreen ? "none" : "flex"}
-        sx={{
-          mr: "20px",
-          ml: "20px",
-        }}
-      >
-        <Wallet />
-      </Box>
-      <Box
-        sx={{
-          display: mobileScreen ? "flex" : "none",
-          gap: "10px",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <MobileNav />
-      </Box>
+      {!mobileScreen && (
+        <Box
+          display={mobileScreen ? "none" : "flex"}
+          sx={{
+            mr: "20px",
+            ml: "20px",
+          }}
+        >
+          <Wallet />
+        </Box>
+      )}
+      {mobileScreen && (
+        <Box
+          sx={{
+            display: mobileScreen ? "flex" : "none",
+            gap: "10px",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <MobileNav />
+        </Box>
+      )}
     </nav>
   );
 };

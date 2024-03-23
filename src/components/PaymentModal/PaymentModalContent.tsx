@@ -142,7 +142,6 @@ export const PaymentModalContent = React.forwardRef(
           "Transaction sent with signature:" + reduceSignature(sig)
         );
         const txData: PayrollTransaction = {
-          id: 1,
           txId: sig,
           sentTo: name,
           amount: amount,

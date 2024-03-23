@@ -31,3 +31,14 @@ type TokensBalance = {
     balance: number;
   };
 };
+
+export type Chad = {
+  name: string;
+  employeeCode: string;
+  contactNumber: string;
+  designation: string;
+  address: string;
+  pubkey: string; // Add the "pubkey" field
+  salary: number;
+  team: string; // Add the "team" field
+};

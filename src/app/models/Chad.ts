@@ -4,11 +4,6 @@ mongoose.connect(process.env.MONGODB_PROD_URI as string);
 mongoose.Promise = global.Promise;
 
 const ChadSchema = new Schema({
-  id: {
-    type: Number,
-    required: true,
-    autoIncrement: true,
-  },
   name: {
     type: String,
     required: true,

@@ -1,7 +1,6 @@
 import { Keypair } from "@solana/web3.js";
 
 export type Chad = {
-  id: number;
   name: string;
   employeeCode: string;
   contactNumber: string;
@@ -44,7 +43,6 @@ export const generatePeopleData = (): Chad[] => {
   for (let i = 1; i <= 20; i++) {
     const keypair = Keypair.generate();
     const person: Chad = {
-      id: i,
       name: `Person_${i}`,
       employeeCode: `EMP${generateRandomNumber(1000, 9999)}`,
       contactNumber: generateRandomContactNumber(),
