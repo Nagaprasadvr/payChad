@@ -1,8 +1,10 @@
+@import "general-sans.css";
+
 html,
 body {
   color: whitesmoke;
   background-color: black;
-  font-family: "Courier New", Courier, monospace;
+  font-family: "GeneralSans", sans-serif;
 }
 
 .center {

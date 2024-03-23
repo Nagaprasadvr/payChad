@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-mongoose.connect(process.env.MONGODB_URI as string);
+mongoose.connect(process.env.MONGODB_PROD_URI as string);
 mongoose.Promise = global.Promise;
 
 const PayrollTransactionSchema = new Schema({

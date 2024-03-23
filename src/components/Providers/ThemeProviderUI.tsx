@@ -6,19 +6,11 @@ const darkTheme = createTheme({
     mode: "dark",
   },
   typography: {
-    fontFamily: '"Courier New", Courier, monospace',
+    fontFamily: '"GeneralSans", Courier, monospace',
     fontWeightRegular: 600,
     fontSize: 15,
   },
   components: {
-    // MuiModal: {
-    //   styleOverrides: {
-    //     root: {
-    //       zIndex: 9999,
-    //       backdropFilter: "blur(3px)",
-    //     },
-    //   },
-    // },
     MuiOutlinedInput: {
       styleOverrides: {
         root: {
