@@ -1,12 +1,5 @@
 "use client";
-import {
-  Box,
-  Button,
-  Input,
-  Skeleton,
-  Tooltip,
-  Typography,
-} from "@mui/material";
+import { Box, Tooltip, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { PayrollTransaction, generateRandomTransaction } from "./data";
@@ -31,7 +24,6 @@ const PayrollHistoryDataPage = () => {
         const resJson = await res.json();
         if (resJson.status === "success") {
           setTransactions(resJson.data);
-          console.log(resJson.data);
           setLoading(false);
         }
       } catch (e) {

@@ -5,9 +5,13 @@ import Chad from "@/app/models/Chad";
 export async function GET(req: NextRequest) {
   try {
     const chads = await Chad.find();
+    const formattedData = chads.map((chad) => ({
+      ...chad._doc,
+      id: chad._id,
+    }));
     return NextResponse.json({
       status: "success",
-      chads,
+      chads: formattedData,
     });
   } catch (e) {
     console.log(e);
@@ -31,6 +35,7 @@ export async function POST(req: NextRequest) {
         message: "Chad already exists",
       });
     }
+
     await Chad.create(chadData);
     return NextResponse.json({
       status: "success",

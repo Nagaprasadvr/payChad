@@ -15,6 +15,8 @@ import {
   FormControl,
   InputLabel,
   Tooltip,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import { useState, useMemo, useEffect, forwardRef, useContext } from "react";
 import toast from "react-hot-toast";
@@ -46,6 +48,9 @@ export const PaymentModalContent = React.forwardRef(
     const { publicKey, connected, signTransaction, sendTransaction } =
       useWallet();
 
+    const { breakpoints } = useTheme();
+    const smallScreen = useMediaQuery(breakpoints.down("lg"));
+    const mobileScreen = useMediaQuery(breakpoints.down("md"));
     const handleChangeToken = (e: any) => {
       setToken(e.target.value);
     };
@@ -193,7 +198,7 @@ export const PaymentModalContent = React.forwardRef(
           sx={{
             backgroundColor: "black",
             height: "fit-content",
-            width: "35vw",
+            width: mobileScreen ? "70vw" : smallScreen ? "50vw" : "30vw",
             p: "20px",
             flexDirection: "column",
             display: "flex",
@@ -315,7 +320,7 @@ export const PaymentModalContent = React.forwardRef(
                     textAlign: "center",
                   }}
                 >
-                  Balance :
+                  Balance :{" "}
                   {tokenBalance !== undefined
                     ? tokenBalance.toLocaleString() + " " + token.toUpperCase()
                     : "Loading..."}
@@ -334,7 +339,8 @@ export const PaymentModalContent = React.forwardRef(
                   sx={{
                     width: "100%",
                     display: "flex",
-                    flexDirection: "row",
+                    flexDirection:
+                      smallScreen || mobileScreen ? "column" : "row",
                     justifyContent: "space-between",
                     alignItems: "center",
                     gap: "10px",
@@ -342,7 +348,12 @@ export const PaymentModalContent = React.forwardRef(
                 >
                   <Box
                     sx={{
-                      width: "50%",
+                      width: smallScreen || mobileScreen ? "100%" : "50%",
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      gap: "10px",
                     }}
                   >
                     <TextField
@@ -360,6 +371,14 @@ export const PaymentModalContent = React.forwardRef(
                           : ""
                       }
                     />
+                    <Tooltip title="note precision is based on decimals of tokens">
+                      <InfoIcon
+                        sx={{
+                          fontSize: "20px",
+                          color: "white",
+                        }}
+                      />
+                    </Tooltip>
                   </Box>
                   <Box
                     sx={{
@@ -368,7 +387,7 @@ export const PaymentModalContent = React.forwardRef(
                       justifyContent: "space-between",
                       alignItems: "center",
                       gap: "10px",
-                      width: "50%",
+                      width: mobileScreen || smallScreen ? "100%" : "50%",
                     }}
                   >
                     <FormControl fullWidth>

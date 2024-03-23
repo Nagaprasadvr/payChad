@@ -56,3 +56,10 @@ export const PaymentModal = ({
     </Box>
   );
 };
+function useTheme(): { breakpoints: any } {
+  throw new Error("Function not implemented.");
+}
+
+function useMediaQuery(arg0: any) {
+  throw new Error("Function not implemented.");
+}

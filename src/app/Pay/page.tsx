@@ -127,7 +127,12 @@ const Pay = () => {
       try {
         const res = await fetch("/api/chad");
         const data = await res.json();
-        setData(data.chads);
+        const filteredData = data?.chads?.map((d: any, index: number) => ({
+          id: d.id,
+          name: d.name,
+          pubkey: d.pubkey,
+        }));
+        setData(filteredData ?? []);
       } catch (e) {
         console.log(e);
       }
@@ -146,6 +151,8 @@ const Pay = () => {
     return data;
   }, [showSearch, searchString, data]);
 
+  console.log("data", dataToDisplay);
+
   return (
     <Box
       className="center"
@@ -163,6 +170,8 @@ const Pay = () => {
           gap: "20px",
           justifyContent: "center",
           alignItems: "center",
+          mb: "10px",
+          width: "90%",
         }}
       >
         <Typography>Search Chad</Typography>
@@ -207,11 +216,14 @@ const Pay = () => {
           m: "10px",
           alignItems: "center",
           gap: "20px",
+          width: "90%",
+          justifyContent: "center",
         }}
       >
         {!loading && data.length > 0 ? (
           <DataGrid
             sx={{
+              width: "100%",
               ".MuiDataGrid-cell": {
                 color: "whitesmoke",
                 fontWeight: "bold",

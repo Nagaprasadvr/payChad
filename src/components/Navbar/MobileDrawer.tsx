@@ -36,7 +36,6 @@ export const MobDrawer = () => {
         height: "100%",
         display: "flex",
         flexDirection: "column",
-        pt: "50px",
         justifyContent: "flex-start",
         alignItems: "flex-start",
         borderLeft: `0.5px solid ${CHARCOAL}`,
