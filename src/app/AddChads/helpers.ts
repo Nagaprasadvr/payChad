@@ -48,13 +48,6 @@ export const validateAddChadData = (data: Chad) => {
         errors.push("Salary must be greater than 0");
       }
     }
-
-    // if (data.employeeCode) {
-    //   const regex = /^[A-Z]{3}\d{4}$/;
-    //   if (!regex.test(data.employeeCode)) {
-    //     errors.push("Employee Code is invalid");
-    //   }
-    // }
   }
 
   return errors;
