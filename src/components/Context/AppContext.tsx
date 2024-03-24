@@ -4,6 +4,7 @@ import { createContext, useEffect, useMemo, useState } from "react";
 import * as solanaToken from "@solana/spl-token";
 import * as solana from "@solana/web3.js";
 import { useWallet } from "@solana/wallet-adapter-react";
+import { TokensInfo, TokensBalance } from "@/utils/types";
 
 interface AppContextType {
   connection: Connection;

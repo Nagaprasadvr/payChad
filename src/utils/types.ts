@@ -1,4 +1,4 @@
-type TokensInfo = {
+export type TokensInfo = {
   SOL: {
     decimals: number;
     mint: string;
@@ -17,7 +17,7 @@ type TokensInfo = {
   };
 };
 
-type TokensBalance = {
+export type TokensBalance = {
   SOL: {
     balance: number;
   };
